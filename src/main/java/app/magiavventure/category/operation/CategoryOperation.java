@@ -1,6 +1,5 @@
 package app.magiavventure.category.operation;
 
-import app.magiavventure.category.error.CategoryException;
 import app.magiavventure.category.model.CreateCategory;
 import app.magiavventure.category.model.Category;
 import app.magiavventure.category.model.UpdateCategory;
