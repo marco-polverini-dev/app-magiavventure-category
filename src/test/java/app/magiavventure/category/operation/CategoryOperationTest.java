@@ -1,6 +1,7 @@
 package app.magiavventure.category.operation;
 
 import app.magiavventure.category.entity.ECategory;
+import app.magiavventure.category.error.CategoryException;
 import app.magiavventure.category.mapper.CategoryMapper;
 import app.magiavventure.category.model.CreateCategory;
 import app.magiavventure.category.model.Category;
@@ -17,11 +18,10 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -101,7 +101,7 @@ class CategoryOperationTest {
         Mockito.when(categoryRepository.exists(exampleArgumentCaptor.capture()))
                 .thenReturn(Boolean.TRUE);
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class,
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
                 () -> categoryOperation.createCategory(createCategory));
 
         Mockito.verify(categoryRepository).exists(exampleArgumentCaptor.capture());
@@ -110,7 +110,8 @@ class CategoryOperationTest {
 
         Assertions.assertNotNull(exception);
         Assertions.assertEquals(createCategory.getName(), eCategoryExampleCaptured.getProbe().getName());
-        Assertions.assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        Assertions.assertEquals("category-exists", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
     }
 
     @Test
@@ -139,7 +140,7 @@ class CategoryOperationTest {
         Assertions.assertNotNull(categoriesResponse);
         Assertions.assertEquals(1, categoriesResponse.size());
         Assertions.assertNotNull(sort);
-        Assertions.assertTrue(sort.getOrderFor("name").getDirection().isAscending());
+        Assertions.assertTrue(Objects.requireNonNull(sort.getOrderFor("name")).getDirection().isAscending());
         categoriesResponse
                 .stream()
                 .findFirst()
@@ -166,7 +167,7 @@ class CategoryOperationTest {
         Assertions.assertNotNull(categoriesResponse);
         Assertions.assertEquals(0, categoriesResponse.size());
         Assertions.assertNotNull(sort);
-        Assertions.assertTrue(sort.getOrderFor("name").getDirection().isAscending());
+        Assertions.assertTrue(Objects.requireNonNull(sort.getOrderFor("name")).getDirection().isAscending());
     }
 
     @Test
@@ -205,13 +206,14 @@ class CategoryOperationTest {
         Mockito.when(categoryRepository.findById(id))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class,
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
                 () -> categoryOperation.retrieveCategory(id));
 
         Mockito.verify(categoryRepository).findById(id);
 
         Assertions.assertNotNull(exception);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        Assertions.assertEquals("category-not-found", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
     }
 
     @Test
@@ -294,7 +296,7 @@ class CategoryOperationTest {
         Mockito.when(categoryRepository.exists(exampleArgumentCaptor.capture()))
                 .thenReturn(Boolean.TRUE);
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class,
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
                 () -> categoryOperation.updateCategory(updateCategory));
 
         Mockito.verify(categoryRepository).exists(exampleArgumentCaptor.capture());
@@ -304,7 +306,8 @@ class CategoryOperationTest {
 
         Assertions.assertNotNull(exception);
         Assertions.assertEquals(updateCategory.getName(), eCategoryExampleCaptured.getProbe().getName());
-        Assertions.assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        Assertions.assertEquals("category-exists", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
     }
 
     @Test
@@ -322,13 +325,14 @@ class CategoryOperationTest {
         Mockito.when(categoryRepository.findById(updateCategory.getId()))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class,
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
                 () -> categoryOperation.updateCategory(updateCategory));
 
         Mockito.verify(categoryRepository).findById(updateCategory.getId());
 
 
         Assertions.assertNotNull(exception);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        Assertions.assertEquals("category-not-found", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
     }
 }

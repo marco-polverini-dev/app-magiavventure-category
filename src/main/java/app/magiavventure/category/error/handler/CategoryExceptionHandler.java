@@ -28,7 +28,8 @@ public class CategoryExceptionHandler {
         CategoryError categoryError = categoryException.getCategoryError();
         ErrorMessage errorMessage = retrieveError(categoryError.getKey(), categoryError.getArgs());
 
-        if(Objects.isNull(errorMessage)) errorMessage = retrieveError(CategoryException.UNKNOWN_ERROR);
+        if(Objects.isNull(errorMessage))
+            errorMessage = retrieveError(CategoryException.UNKNOWN_ERROR);
 
         HttpError httpError = categoryErrorMapper.map(errorMessage);
 
@@ -42,6 +43,7 @@ public class CategoryExceptionHandler {
                 .getErrors()
                 .getErrorMessages()
                 .get(key);
+        if(Objects.isNull(errorMessage)) return null;
 
         if(Objects.nonNull(args) && args.length > 0) {
             String message = errorMessage.getMessage();

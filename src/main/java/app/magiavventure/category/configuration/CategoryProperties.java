@@ -1,5 +1,6 @@
 package app.magiavventure.category.configuration;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class CategoryProperties {
         private Map<String, ErrorMessage> errorMessages = Collections.emptyMap();
 
         @Data
+        @Builder
         public static class ErrorMessage {
             private String message;
             private String description;
