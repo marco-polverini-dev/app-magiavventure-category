@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public class CategoryException extends RuntimeException {
 
-    public static final String TEST = "test";
+    public static final String CATEGORY_NOT_FOUND = "category-not-found";
+    public static final String CATEGORY_EXISTS = "category-exists";
     public static final String UNKNOWN_ERROR = "unknown-error";
 
     private final transient CategoryError categoryError;

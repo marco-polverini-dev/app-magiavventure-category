@@ -1,6 +1,7 @@
 package app.magiavventure.category.service;
 
 import app.magiavventure.category.entity.ECategory;
+import app.magiavventure.category.error.CategoryException;
 import app.magiavventure.category.mapper.CategoryMapper;
 import app.magiavventure.category.model.CreateCategory;
 import app.magiavventure.category.model.Category;
@@ -11,12 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -37,30 +37,27 @@ public class CategoryService {
                 .background(createCategory.getBackground())
                 .active(createCategory.isActive())
                 .build();
-        ECategory categoryCreated = categoryRepository.save(categoryToSave);
-        log.debug("Created new category with: {}", categoryCreated);
-        return categoryMapper.map(categoryCreated);
+        return Optional.of(categoryRepository.save(categoryToSave))
+                .map(categoryMapper::map)
+                .orElseThrow(() -> CategoryException.of(CategoryException.UNKNOWN_ERROR));
     }
 
     public Category updateCategory(UpdateCategory updateCategory) {
         ECategory categoryToUpdate = findEntityById(updateCategory.getId());
 
-
-        if(Objects.nonNull(updateCategory.getName())
-                && !updateCategory.getName().isBlank()
-                    && !updateCategory.getName().equals(categoryToUpdate.getName())) {
+        if(!updateCategory.getName().equals(categoryToUpdate.getName()))
             this.checkIfCategoryExists(updateCategory.getName());
-            categoryToUpdate.setName(updateCategory.getName());
-        }
-        if(Objects.nonNull(updateCategory.getBackground()) && !updateCategory.getBackground().isBlank())
-            categoryToUpdate.setBackground(updateCategory.getBackground());
+
+        categoryToUpdate.setName(updateCategory.getName());
+        categoryToUpdate.setBackground(updateCategory.getBackground());
+
         if(Objects.nonNull(updateCategory.getActive())
                 && !updateCategory.getActive().equals(categoryToUpdate.isActive()))
             categoryToUpdate.setActive(updateCategory.getActive());
 
-        ECategory categoryUpdated = categoryRepository.save(categoryToUpdate);
-        log.debug("Updated category with: {}", categoryUpdated);
-        return categoryMapper.map(categoryUpdated);
+        return Optional.of(categoryRepository.save(categoryToUpdate))
+                .map(categoryMapper::map)
+                .orElseThrow(() -> CategoryException.of(CategoryException.UNKNOWN_ERROR));
     }
 
     public Category findById(UUID id) {
@@ -69,8 +66,7 @@ public class CategoryService {
 
     private ECategory findEntityById(UUID id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Impossibile trovare la categoria"));
+                .orElseThrow(() -> CategoryException.of(CategoryException.CATEGORY_NOT_FOUND, id.toString()));
     }
 
     public List<Category> findAll() {
@@ -87,10 +83,7 @@ public class CategoryService {
                 .name(name)
                 .build(), ExampleMatcher.matchingAny());
 
-        if(categoryRepository.exists(categoryExample)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Impossibile procedere con il salvataggio, esiste già una categoria con nome: %s",
-                            name));
-        }
+        if(categoryRepository.exists(categoryExample))
+            throw CategoryException.of(CategoryException.CATEGORY_EXISTS, name);
     }
 }

@@ -14,7 +14,9 @@ public class UpdateCategory {
 
     @NotNull
     private UUID id;
+    @NotNull
     private String name;
+    @NotNull
     private String background;
     private Boolean active;
 

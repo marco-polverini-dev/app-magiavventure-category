@@ -7,3 +7,13 @@ category:
           Si è verificato un errore.
           Riprova più tardi
         status: 500
+      category-not-found:
+        code: category-not-found
+        message: |-
+          La categoria con id %s non è stata trovata
+        status: 404
+      category-exists:
+        code: category-exists
+        message: |-
+          Impossibile procedere con il salvataggio, esiste già una categoria con nome: %s
+        status: 403

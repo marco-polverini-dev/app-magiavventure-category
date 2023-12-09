@@ -4,6 +4,7 @@ import app.magiavventure.category.model.CreateCategory;
 import app.magiavventure.category.model.Category;
 import app.magiavventure.category.model.UpdateCategory;
 import app.magiavventure.category.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,13 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/categories")
+@Tag(name = "Category Operation", description = "Create, update and search categories")
 public class CategoryOperation {
 
     private final CategoryService categoryService;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Category createCategory(@RequestBody @Valid CreateCategory createCategory) {
-        log.debug("Starting create category with: {}", createCategory);
         return categoryService.createCategory(createCategory);
     }
 
@@ -33,13 +34,12 @@ public class CategoryOperation {
     }
 
     @GetMapping("/{id}")
-    public Category retrieveCategory(@PathVariable("id") UUID id) {
+    public Category retrieveCategory(@PathVariable(name = "id") UUID id) {
         return categoryService.findById(id);
     }
 
     @PutMapping
     public Category updateCategory(@RequestBody @Valid UpdateCategory updateCategory) {
-        log.debug("Starting update category with: {}", updateCategory);
         return categoryService.updateCategory(updateCategory);
     }
 }
