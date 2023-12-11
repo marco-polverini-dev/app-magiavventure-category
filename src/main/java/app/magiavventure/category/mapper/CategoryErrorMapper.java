@@ -1,7 +1,7 @@
 package app.magiavventure.category.mapper;
 
 import app.magiavventure.category.configuration.CategoryProperties.ErrorProperties.ErrorMessage;
-import app.magiavventure.category.error.handler.HttpError;
+import app.magiavventure.category.model.HttpError;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

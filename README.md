@@ -1,4 +1,6 @@
 # Magiavventure - Category
+[![codecov](https://codecov.io/gh/marco-polverini-dev/app-magiavventure-category/graph/badge.svg?token=ZT248ZN1S1)](https://codecov.io/gh/marco-polverini-dev/app-magiavventure-category)
+
 This service allows to create/update and find the categories used by Magiavventure App.
 
 ## Configuration

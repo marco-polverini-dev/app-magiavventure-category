@@ -2,8 +2,9 @@ package app.magiavventure.category.error.handler;
 
 import app.magiavventure.category.configuration.CategoryProperties;
 import app.magiavventure.category.configuration.CategoryProperties.ErrorProperties.ErrorMessage;
-import app.magiavventure.category.error.CategoryError;
+import app.magiavventure.category.model.CategoryError;
 import app.magiavventure.category.error.CategoryException;
+import app.magiavventure.category.model.HttpError;
 import app.magiavventure.category.mapper.CategoryErrorMapper;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;

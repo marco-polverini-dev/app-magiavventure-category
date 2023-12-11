@@ -1,4 +1,4 @@
-package app.magiavventure.category.error.handler;
+package app.magiavventure.category.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

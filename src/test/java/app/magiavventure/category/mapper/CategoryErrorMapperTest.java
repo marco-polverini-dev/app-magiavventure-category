@@ -1,7 +1,7 @@
 package app.magiavventure.category.mapper;
 
 import app.magiavventure.category.configuration.CategoryProperties;
-import app.magiavventure.category.error.handler.HttpError;
+import app.magiavventure.category.model.HttpError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

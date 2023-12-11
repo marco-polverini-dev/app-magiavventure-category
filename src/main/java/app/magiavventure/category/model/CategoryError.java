@@ -1,4 +1,4 @@
-package app.magiavventure.category.error;
+package app.magiavventure.category.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

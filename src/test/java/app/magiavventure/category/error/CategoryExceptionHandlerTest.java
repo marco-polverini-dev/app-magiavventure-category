@@ -2,8 +2,8 @@ package app.magiavventure.category.error;
 
 import app.magiavventure.category.configuration.CategoryProperties;
 import app.magiavventure.category.error.handler.CategoryExceptionHandler;
-import app.magiavventure.category.error.handler.HttpError;
 import app.magiavventure.category.mapper.CategoryErrorMapper;
+import app.magiavventure.category.model.HttpError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -21,6 +21,18 @@ jacocoTestReport {
 	reports {
 		xml.required = true
 	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it,
+					exclude: [
+					        'app/magiavventure/category/repository**',
+							'app/magiavventure/category/model**',
+							'app/magiavventure/category/entity**',
+							'app/magiavventure/category/configuration**',
+							'app/magiavventure/category/CategoryApplication.class'
+					])
+		}))
+	}
 }
 
 configurations {

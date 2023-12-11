@@ -1,5 +1,6 @@
 package app.magiavventure.category.error;
 
+import app.magiavventure.category.model.CategoryError;
 import lombok.Getter;
 
 @Getter
