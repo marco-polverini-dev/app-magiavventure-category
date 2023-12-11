@@ -61,3 +61,118 @@ List of code errors that the api can return
 ```properties
 category-exists     #(403 - in case there is already a category with the same name)
 ```
+### Update Category
+This request allow to update a category
+
+`PUT /v1/categories`
+
+```bash
+curl -X 'PUT' \
+  '<hostname>:<port>/v1/categories' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": "<id>",
+  "name": "<name>",
+  "background": "<background>",
+  "active": <active>
+}'
+```
+`Response`
+
+```text
+HTTP/1.1 200 OK
+connection: keep-alive 
+content-type: application/json 
+date: Sun,10 Dec 2023 09:24:25 GMT 
+keep-alive: timeout=60 
+transfer-encoding: chunked 
+
+{
+  "id": "<id>",
+  "name": "<name>",
+  "background": "<background>"
+}
+```
+
+`Errors`
+
+List of code errors that the api can return
+
+```properties
+category-exists     #(403 - in case there is already a category with the same name)
+category-not-found  #(404 - in case a category not found with the id in body request)
+```
+
+### Find All Categories
+This request allow to find all categories
+
+`GET /v1/categories`
+
+```bash
+curl -X 'GET' \
+  '<hostname>:<port>/v1/categories' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json'
+```
+`Response`
+
+```text
+HTTP/1.1 200 OK
+connection: keep-alive 
+content-type: application/json 
+date: Sun,10 Dec 2023 09:24:25 GMT 
+keep-alive: timeout=60 
+transfer-encoding: chunked 
+
+[
+  {
+    "id": "<id>",
+    "name": "<name>",
+    "background": "<background>"
+  }
+]
+```
+
+### Find Category by ID
+This request allow to find a category by ID
+
+`PUT /v1/categories/{id}`
+
+```bash
+curl -X 'GET' \
+  '<hostname>:<port>/v1/categories/{id}' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json'
+```
+`Response`
+
+```text
+HTTP/1.1 200 OK
+connection: keep-alive 
+content-type: application/json 
+date: Sun,10 Dec 2023 09:24:25 GMT 
+keep-alive: timeout=60 
+transfer-encoding: chunked 
+
+{
+  "id": "<id>",
+  "name": "<name>",
+  "background": "<background>"
+}
+```
+
+`Errors`
+
+List of code errors that the api can return
+
+```properties
+category-not-found  #(404 - in case a category not found)
+```
+
+## Running local
+For run the service in local environment need to execute following actions
+
+### Running service
+Run the service with the following profile:
+1. "local" for local environment configuration
