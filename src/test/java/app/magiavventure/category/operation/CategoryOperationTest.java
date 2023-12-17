@@ -335,4 +335,47 @@ class CategoryOperationTest {
         Assertions.assertEquals("category-not-found", exception.getCategoryError().getKey());
         Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
     }
+
+    @Test
+    @DisplayName("Delete category by id test")
+    void deleteCategoryByIdTest_ok() {
+
+        var id = UUID.randomUUID();
+        var eCategory = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background")
+                .createdDate(LocalDateTime.now())
+                .active(true)
+                .build();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.of(eCategory));
+        Mockito.doNothing().when(categoryRepository).deleteById(id);
+
+        categoryOperation.deleteCategory(id);
+
+        Mockito.verify(categoryRepository).findById(id);
+        Mockito.verify(categoryRepository).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("Delete category by id test that not exists")
+    void deleteCategoryByIdTest_throwNotFoundException_categoryNotExists() {
+
+        var id = UUID.randomUUID();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
+                () -> categoryOperation.deleteCategory(id));
+
+        Mockito.verify(categoryRepository).findById(id);
+
+        Assertions.assertNotNull(exception);
+        Assertions.assertEquals("category-not-found", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
+    }
 }

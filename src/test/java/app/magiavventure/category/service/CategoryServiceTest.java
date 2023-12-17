@@ -280,5 +280,43 @@ class CategoryServiceTest {
         Assertions.assertEquals(Sort.Direction.ASC, order.getDirection());
     }
 
+    @Test
+    @DisplayName("Delete category by id")
+    void deleteCategoryById_ok() {
+        var id = UUID.randomUUID();
+        var eCategory = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background")
+                .active(true)
+                .build();
 
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.of(eCategory));
+        Mockito.doNothing().when(categoryRepository).deleteById(id);
+
+        categoryService.deleteById(id);
+
+        Mockito.verify(categoryRepository).findById(id);
+        Mockito.verify(categoryRepository).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("Delete category by id but not found")
+    void deleteCategoryById_ko_notFound() {
+        var id = UUID.randomUUID();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        CategoryException exception = Assertions.assertThrows(CategoryException.class,
+                () -> categoryService.deleteById(id));
+
+        Mockito.verify(categoryRepository).findById(id);
+
+        Assertions.assertNotNull(exception);
+        Assertions.assertEquals("category-not-found", exception.getCategoryError().getKey());
+        Assertions.assertEquals(1, exception.getCategoryError().getArgs().length);
+    }
 }

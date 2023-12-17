@@ -172,6 +172,36 @@ List of code errors that the api can return
 category-not-found  #(404 - in case a category not found)
 ```
 
+### Delete Category by ID
+This request allow to delete a category by ID
+
+`DELETE /v1/categories/{id}`
+
+```bash
+curl -X 'DELETE' \
+  '<hostname>:<port>/v1/categories/{id}' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json'
+```
+`Response`
+
+```text
+HTTP/1.1 204 NO-CONTENT
+connection: keep-alive 
+content-type: application/json 
+date: Sun,10 Dec 2023 09:24:25 GMT 
+keep-alive: timeout=60 
+transfer-encoding: chunked 
+```
+
+`Errors`
+
+List of code errors that the api can return
+
+```properties
+category-not-found  #(404 - in case a category not found)
+```
+
 ## Running local
 For run the service in local environment need to execute following actions
 

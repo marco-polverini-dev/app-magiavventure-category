@@ -64,6 +64,12 @@ public class CategoryService {
         return categoryMapper.map(findEntityById(id));
     }
 
+    public void deleteById(UUID id) {
+        ECategory eCategory = findEntityById(id);
+        if(Objects.nonNull(eCategory))
+            categoryRepository.deleteById(id);
+    }
+
     private ECategory findEntityById(UUID id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> CategoryException.of(CategoryException.CATEGORY_NOT_FOUND, id.toString()));

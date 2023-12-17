@@ -42,4 +42,10 @@ public class CategoryOperation {
     public Category updateCategory(@RequestBody @Valid UpdateCategory updateCategory) {
         return categoryService.updateCategory(updateCategory);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCategory(@PathVariable(name = "id") UUID id) {
+        categoryService.deleteById(id);
+    }
 }
