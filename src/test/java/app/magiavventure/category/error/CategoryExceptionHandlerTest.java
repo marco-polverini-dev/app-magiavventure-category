@@ -53,6 +53,28 @@ class CategoryExceptionHandlerTest {
         Assertions.assertEquals(expectedStatus, responseEntity.getBody().getStatus());
     }
 
+    @ParameterizedTest
+    @CsvSource({"unknown-error, unknown-error, errore sconosciuto, descrizione sconosciuta, 500",
+            "category-not-found, category-not-found, categoria non trovata, descrizione categoria non trovata, 404",
+            "category-exists, category-exists, categoria già esistente %s, descrizione categoria già esistente, 403",
+            "error-not-exists, unknown-error, errore sconosciuto, descrizione sconosciuta, 500"})
+    @DisplayName("Handle category exception and return ResponseEntity without arguments")
+    void handleCategoryExceptionTest(String code, String expectedCode, String expectedMessage,
+                                     String expectedDescription, int expectedStatus) {
+
+        var categoryException = CategoryException.of(code);
+
+        ResponseEntity<HttpError> responseEntity = categoryExceptionHandler.categoryExceptionHandler(categoryException);
+
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertEquals(expectedStatus, responseEntity.getStatusCode().value());
+        Assertions.assertEquals(expectedCode, responseEntity.getBody().getCode());
+        Assertions.assertEquals(expectedMessage, responseEntity.getBody().getMessage());
+        Assertions.assertEquals(expectedDescription, responseEntity.getBody().getDescription());
+        Assertions.assertEquals(expectedStatus, responseEntity.getBody().getStatus());
+    }
+
     private CategoryProperties retrieveCategoryProperties() {
         var categoryProperties = new CategoryProperties();
         var errorProperties = new CategoryProperties.ErrorProperties();

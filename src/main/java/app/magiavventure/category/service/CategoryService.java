@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -37,9 +36,8 @@ public class CategoryService {
                 .background(createCategory.getBackground())
                 .active(createCategory.isActive())
                 .build();
-        return Optional.of(categoryRepository.save(categoryToSave))
-                .map(categoryMapper::map)
-                .orElseThrow(() -> CategoryException.of(CategoryException.UNKNOWN_ERROR));
+        ECategory savedCategory = categoryRepository.save(categoryToSave);
+        return categoryMapper.map(savedCategory);
     }
 
     public Category updateCategory(UpdateCategory updateCategory) {
@@ -55,9 +53,8 @@ public class CategoryService {
                 && !updateCategory.getActive().equals(categoryToUpdate.isActive()))
             categoryToUpdate.setActive(updateCategory.getActive());
 
-        return Optional.of(categoryRepository.save(categoryToUpdate))
-                .map(categoryMapper::map)
-                .orElseThrow(() -> CategoryException.of(CategoryException.UNKNOWN_ERROR));
+        ECategory updatedCategory = categoryRepository.save(categoryToUpdate);
+        return categoryMapper.map(updatedCategory);
     }
 
     public Category findById(UUID id) {

@@ -6,7 +6,6 @@ import app.magiavventure.category.model.CategoryError;
 import app.magiavventure.category.error.CategoryException;
 import app.magiavventure.category.model.HttpError;
 import app.magiavventure.category.mapper.CategoryErrorMapper;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +38,14 @@ public class CategoryExceptionHandler {
                 .body(httpError);
     }
 
-    private ErrorMessage retrieveError(@NotNull String key, @Nullable Object... args) {
+    private ErrorMessage retrieveError(@NotNull String key, Object... args) {
         var errorMessage = categoryProperties
                 .getErrors()
                 .getErrorMessages()
                 .get(key);
         if(Objects.isNull(errorMessage)) return null;
 
-        if(Objects.nonNull(args) && args.length > 0) {
+        if(args.length > 0) {
             String message = errorMessage.getMessage();
             errorMessage.setMessage(String.format(message, args));
         }

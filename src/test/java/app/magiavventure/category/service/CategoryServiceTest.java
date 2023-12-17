@@ -152,6 +152,143 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("Update category with same name")
+    void updateCategory_ok_withSameName() {
+        var id = UUID.randomUUID();
+        var updateCategory = UpdateCategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .active(true)
+                .build();
+        var eCategory = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background")
+                .active(true)
+                .build();
+        var eCategoryUpdated = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .active(false)
+                .build();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.of(eCategory));
+        Mockito.when(categoryRepository.save(eCategoryCaptor.capture()))
+                .thenReturn(eCategoryUpdated);
+
+        Category category = categoryService.updateCategory(updateCategory);
+
+        Mockito.verify(categoryRepository).findById(id);
+        Mockito.verify(categoryRepository).save(eCategoryCaptor.capture());
+        ECategory categoryCapt = eCategoryCaptor.getValue();
+
+        Assertions.assertNotNull(category);
+        Assertions.assertEquals(updateCategory.getName(), category.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), category.getBackground());
+        Assertions.assertEquals(updateCategory.getName(), categoryCapt.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), categoryCapt.getBackground());
+        Assertions.assertNotNull(categoryCapt.getId());
+        Assertions.assertTrue(categoryCapt.isActive());
+    }
+
+    @Test
+    @DisplayName("Update category with same name but when saving throw error")
+    void updateCategory_errorOnSaving_withSameName() {
+        var id = UUID.randomUUID();
+        var updateCategory = UpdateCategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .active(true)
+                .build();
+        var eCategory = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background")
+                .active(true)
+                .build();
+        var eCategoryUpdated = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .active(false)
+                .build();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.of(eCategory));
+        Mockito.when(categoryRepository.save(eCategoryCaptor.capture()))
+                .thenReturn(eCategoryUpdated);
+
+        Category category = categoryService.updateCategory(updateCategory);
+
+        Mockito.verify(categoryRepository).findById(id);
+        Mockito.verify(categoryRepository).save(eCategoryCaptor.capture());
+        ECategory categoryCapt = eCategoryCaptor.getValue();
+
+        Assertions.assertNotNull(category);
+        Assertions.assertEquals(updateCategory.getName(), category.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), category.getBackground());
+        Assertions.assertEquals(updateCategory.getName(), categoryCapt.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), categoryCapt.getBackground());
+        Assertions.assertNotNull(categoryCapt.getId());
+        Assertions.assertTrue(categoryCapt.isActive());
+    }
+
+    @Test
+    @DisplayName("Update category with same name but not change status active")
+    void updateCategory_ok_withSameNameButNotStatus() {
+        var id = UUID.randomUUID();
+        var updateCategory = UpdateCategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .build();
+        var eCategory = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background")
+                .active(true)
+                .build();
+        var eCategoryUpdated = ECategory
+                .builder()
+                .id(id)
+                .name("test")
+                .background("background 2")
+                .active(true)
+                .build();
+
+        Mockito.when(categoryRepository.findById(id))
+                .thenReturn(Optional.of(eCategory));
+        Mockito.when(categoryRepository.save(eCategoryCaptor.capture()))
+                .thenReturn(eCategoryUpdated);
+
+        Category category = categoryService.updateCategory(updateCategory);
+
+        Mockito.verify(categoryRepository).findById(id);
+        Mockito.verify(categoryRepository).save(eCategoryCaptor.capture());
+        ECategory categoryCapt = eCategoryCaptor.getValue();
+
+        Assertions.assertNotNull(category);
+        Assertions.assertEquals(updateCategory.getName(), category.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), category.getBackground());
+        Assertions.assertEquals(updateCategory.getName(), categoryCapt.getName());
+        Assertions.assertEquals(updateCategory.getBackground(), categoryCapt.getBackground());
+        Assertions.assertNotNull(categoryCapt.getId());
+        Assertions.assertTrue(categoryCapt.isActive());
+    }
+
+    @Test
     @DisplayName("Update category but category not found")
     void updateCategory_ko_categoryNotExists() {
         var updateCategory = UpdateCategory
