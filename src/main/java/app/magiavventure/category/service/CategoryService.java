@@ -65,9 +65,8 @@ public class CategoryService {
     }
 
     public void deleteById(UUID id) {
-        ECategory eCategory = findEntityById(id);
-        if(Objects.nonNull(eCategory))
-            categoryRepository.deleteById(id);
+        findEntityById(id);
+        categoryRepository.deleteById(id);
     }
 
     private ECategory findEntityById(UUID id) {
